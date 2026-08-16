@@ -1,0 +1,5 @@
+require("supplement_bindings")
+require("supplement_window_rules")
+require("supplement_looknfeel")
+require("supplement_autostart")
+require("supplement_workspaces")
