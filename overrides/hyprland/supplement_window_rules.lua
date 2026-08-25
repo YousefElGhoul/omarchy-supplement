@@ -8,13 +8,18 @@ hl.window_rule({
 })
 
 hl.window_rule({
-	name = "prism-launcher-loader",
+	name = "prism-launcher-main",
 	match = {
 		class = "^(org.prismlauncher.PrismLauncher)$",
+		title = "^(Prism Launcher( \\d+(\\.\\d+)*)?)$",
 	},
-	size = {
-		1400,
-		800,
+	float = true,
+})
+
+hl.window_rule({
+	name = "prism-launcher-popups",
+	match = {
+		title = "^(.+ - Prism Launcher( \\d+(\\.\\d+)*)?)$",
 	},
 	float = true,
 })
@@ -33,4 +38,20 @@ hl.window_rule({
 		class = "^(org.mozilla.Thunderbird)$",
 	},
 	workspace = "special:mail silent",
+})
+
+hl.window_rule({
+	name = "thunderbird-no-activate",
+	match = {
+		class = "^(org.mozilla.Thunderbird)$",
+	},
+	suppress_event = "activatefocus",
+})
+
+hl.window_rule({
+	name = "omawrite-move",
+	match = {
+		class = "^(omawrite)$",
+	},
+	workspace = "special:scratchpad",
 })

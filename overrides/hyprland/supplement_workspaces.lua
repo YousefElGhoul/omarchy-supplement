@@ -11,3 +11,8 @@ hl.workspace_rule({
 })
 
 o.bind("SUPER + A", "Toggle AI Chat", hl.dsp.workspace.toggle_special("ai"))
+
+hl.workspace_rule({
+	workspace = "special:scratchpad",
+	on_created_empty = "omawrite",
+})
