@@ -25,9 +25,9 @@ hl.window_rule({
 })
 
 hl.window_rule({
-	name = "claude-ai-move",
+	name = "ai-move",
 	match = {
-		class = "^(claude-desktop)$",
+		class = "^(chatgpt)$",
 	},
 	workspace = "special:ai",
 })

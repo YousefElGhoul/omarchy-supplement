@@ -26,10 +26,17 @@ o.bind("CTRL + SHIFT + ESCAPE", "Activity", { tui = "btop" })
 hl.unbind("SUPER + SHIFT + SLASH")
 o.bind("SUPER + SHIFT + SLASH", "KeePassXC", { launch = "keepassxc" })
 
+-- Better Keybind for Toggle Dictate
+hl.unbind("SUPER + CTRL + X")
+o.bind("SUPER + F9", "Toggle dictation", "voxtype record toggle")
+
 -- Better Calendar than HEY unironically
 hl.unbind("SUPER + SHIFT + C")
 hl.unbind("SUPER + CTRL + ALT + D")
 o.bind("SUPER + SHIFT + C", "Calendar", "omarchy-shell shell toggle omarchy.clock")
+
+-- Notion
+o.bind("SUPER + SHIFT + ALT + N", "Notion", { launch = "notion-app" })
 
 -- Switch behavior of Super + Space and Super + Alt + Space
 hl.unbind("SUPER + SPACE")

@@ -1,0 +1,26 @@
+# Personal portable applications and development tools; Omarchy/base/hardware
+# packages are deliberately omitted. Review before extending this list.
+7zip
+bat
+btop
+chromium
+docker
+docker-buildx
+docker-compose
+eza
+fd
+fzf
+git
+keepassxc
+jq
+lazydocker
+lazygit
+mise-bin
+neovim
+prismlauncher
+ripgrep
+stow
+tmux
+tmuxp
+yazi
+zoxide

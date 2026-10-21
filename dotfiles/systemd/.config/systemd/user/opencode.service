@@ -1,0 +1,15 @@
+[Unit]
+Description=OpenCode V2 API and Web Server
+Documentation=https://opencode.ai/docs/
+
+[Service]
+Type=simple
+WorkingDirectory=%h
+EnvironmentFile=%h/.config/opencode/server.env
+ExecStart=/usr/bin/mise x opencode -- opencode serve --hostname 127.0.0.1 --port 4096
+Restart=on-failure
+RestartSec=5
+UMask=0077
+
+[Install]
+WantedBy=default.target

@@ -1,0 +1,4 @@
+# Candidates noted by the former KeepassXC installer. Never removed by setup;
+# verify they are not in use before any separately approved removal.
+1password-beta
+1password-cli

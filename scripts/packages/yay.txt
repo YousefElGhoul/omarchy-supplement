@@ -1,0 +1,3 @@
+# Selected foreign packages. JetBrains IDEs are installed and managed by Toolbox.
+jetbrains-toolbox
+zen-browser-bin

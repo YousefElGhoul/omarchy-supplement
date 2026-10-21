@@ -1,0 +1,107 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "default_agent": "plan",
+  "formatter": true,
+  "mcp": {
+    "servers": {
+      "context7": {
+        "type": "remote",
+        "url": "https://mcp.context7.com/mcp",
+        "disabled": true
+      },
+      "playwright": {
+        "type": "remote",
+        "url": "http://localhost:8931/mcp",
+        "disabled": true
+      },
+      "github": {
+        "type": "remote",
+        "url": "https://api.githubcopilot.com/mcp/",
+        "oauth": false,
+        "headers": {
+          "authorization": "bearer {file:~/.config/opencode/github-pat.env}",
+          "x-mcp-toolsets": "context,repos,issues,pull_requests,actions",
+          "x-mcp-readonly": "true"
+        },
+        "disabled": true
+      },
+      "postman": {
+        "type": "remote",
+        "url": "https://mcp.postman.com/minimal",
+        "disabled": true
+      }
+    }
+  },
+  "permissions": [
+    {
+      "action": "external_directory",
+      "resource": "*",
+      "effect": "ask"
+    },
+    {
+      "action": "shell",
+      "resource": "*",
+      "effect": "ask"
+    },
+    {
+      "action": "shell",
+      "resource": "git status *",
+      "effect": "allow"
+    },
+    {
+      "action": "shell",
+      "resource": "git diff *",
+      "effect": "allow"
+    },
+    {
+      "action": "shell",
+      "resource": "git log *",
+      "effect": "allow"
+    },
+    {
+      "action": "shell",
+      "resource": "git show *",
+      "effect": "allow"
+    },
+    {
+      "action": "shell",
+      "resource": "git reset --hard *",
+      "effect": "deny"
+    },
+    {
+      "action": "shell",
+      "resource": "git clean -f*",
+      "effect": "deny"
+    },
+    {
+      "action": "shell",
+      "resource": "git push --force*",
+      "effect": "deny"
+    },
+    {
+      "action": "shell",
+      "resource": "git push -f *",
+      "effect": "deny"
+    }
+  ],
+  "agents": {
+    "plan": {
+      "model": "openai/gpt-6.1-sol"
+    },
+    "build": {
+      "model": "openai/gpt-6-luna"
+    },
+    "explore": {
+      "model": "nvidia/deepseek-ai/deepseek-v4.1-flash"
+    },
+    "general": {
+      "model": "nvidia/deepseek-ai/deepseek-v4.1-flash"
+    },
+    "title": {
+      "model": "nvidia/deepseek-ai/deepseek-v4.1-flash"
+    },
+    "summary": {
+      "model": "openai/gpt-6-luna"
+    }
+  }
+}

@@ -1,0 +1,13 @@
+session_name: laptop-dev
+
+windows:
+  - window_name: editor
+    focus: true
+    panes:
+      - nvim .
+  - window_name: git
+    panes:
+      - lazygit
+  - window_name: yazi
+    panes:
+      - yazi .
