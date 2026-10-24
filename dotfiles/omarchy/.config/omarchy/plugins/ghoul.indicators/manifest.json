@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "id": "ghoul.indicators",
+  "name": "Hardware Toggles",
+  "version": "1.0.0",
+  "author": "ghoul",
+  "description": "Webcam, microphone, and laptop keyboard toggles",
+  "kinds": [
+    "bar-widget"
+  ],
+  "entryPoints": {
+    "barWidget": "Indicators.qml"
+  },
+  "barWidget": {
+    "displayName": "Hardware Toggles",
+    "description": "Webcam, microphone, and laptop keyboard toggles",
+    "category": "Hardware",
+    "allowMultiple": false,
+    "schema": [
+      {
+        "key": "items",
+        "type": "multiselect",
+        "label": "Hardware toggles",
+        "description": "Choose which hardware toggles this widget should show. Leave empty to show all toggles.",
+        "noSelectionText": "All toggles",
+        "placeholderText": "Search toggles...",
+        "emptyText": "No toggles",
+        "options": [
+          {
+            "value": "Webcam",
+            "label": "Webcam",
+            "description": "Block or enable the webcam"
+          },
+          {
+            "value": "Microphone",
+            "label": "Microphone",
+            "description": "Mute or unmute the microphone"
+          },
+          {
+            "value": "Keyboard",
+            "label": "Laptop keyboard",
+            "description": "Enable or disable the built-in keyboard"
+          }
+        ]
+      },
+      {
+        "key": "alwaysShow",
+        "type": "boolean",
+        "label": "Always Show",
+        "description": "Show inactive hardware toggles without waiting for hover.",
+        "defaultValue": false
+      }
+    ]
+  }
+}

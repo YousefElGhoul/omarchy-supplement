@@ -1,6 +1,9 @@
 # Personal interactive Bash customizations. Omarchy initializes before this file.
 
-export PATH="$HOME/.local/bin:$PATH"
+case ":$PATH:" in
+  *":$HOME/.local/bin:"*) ;;
+  *) export PATH="$HOME/.local/bin:$PATH" ;;
+esac
 
 # Load Angular CLI autocompletion.
 # source <(ng completion script)
@@ -23,21 +26,23 @@ alias mdedit='NVIM_APPNAME=nvim-markdown nvim'
 alias editrc='nvim ~/.bashrc'
 alias rsource='source ~/.bashrc'
 
+alias virt-manager='/usr/bin/python /usr/bin/virt-manager'
+
 # OpenCode TUI connects to the persistent local server. Credentials remain in
 # the user-managed ~/.config/opencode/server.env file.
 opencode() {
   case "${1:-}" in
-    serve | upgrade | auth | session | api | models | mcp | debug | --version | -v | --help | -h)
-      command opencode "$@"
-      ;;
-    *)
-      (
-        if [[ -f "$HOME/.config/opencode/server.env" ]]; then
-          source "$HOME/.config/opencode/server.env"
-          export OPENCODE_PASSWORD
-        fi
-        command opencode --server http://127.0.0.1:4096 "$@"
-      )
-      ;;
+  serve | upgrade | auth | session | api | models | mcp | debug | --version | -v | --help | -h)
+    command opencode "$@"
+    ;;
+  *)
+    (
+      if [[ -f "$HOME/.config/opencode/server.env" ]]; then
+        source "$HOME/.config/opencode/server.env"
+        export OPENCODE_PASSWORD
+      fi
+      command opencode --server http://127.0.0.1:4096 "$@"
+    )
+    ;;
   esac
 }

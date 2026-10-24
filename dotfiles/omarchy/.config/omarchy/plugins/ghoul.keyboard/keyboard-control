@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+device="at-translated-set-2-keyboard"
+state_dir="$HOME/.local/state/omarchy/toggles/hypr"
+state_file="$state_dir/laptop-keyboard-disabled"
+
+device_present() {
+  hyprctl devices -j | jq -e --arg device "$device" \
+    '.keyboards[] | select(.name == $device)' >/dev/null
+}
+
+apply_state() {
+  local enabled=$1
+  hyprctl eval "hl.device({ name = \"$device\", enabled = $enabled })" >/dev/null
+}
+
+status() {
+  local present=0 enabled=1
+  device_present && present=1
+  [[ -e "$state_file" ]] && enabled=0
+  printf 'present=%s\nenabled=%s\n' "$present" "$enabled"
+}
+
+sync_state() {
+  if device_present && [[ -e "$state_file" ]]; then
+    apply_state false
+  fi
+  status
+}
+
+toggle() {
+  device_present || {
+    status
+    exit 1
+  }
+
+  if [[ -e "$state_file" ]]; then
+    apply_state true
+    rm -f "$state_file"
+  else
+    apply_state false
+    mkdir -p "$state_dir"
+    touch "$state_file"
+  fi
+  status
+}
+
+case "${1:-status}" in
+  status) status ;;
+  sync) sync_state ;;
+  toggle) toggle ;;
+  *) exit 64 ;;
+esac

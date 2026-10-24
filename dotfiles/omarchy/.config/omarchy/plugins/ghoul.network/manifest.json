@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "ghoul.network",
+  "name": "Network + Hotspot",
+  "version": "1.0.0",
+  "author": "ghoul",
+  "description": "Wi-Fi controls, connection state, and laptop hotspot",
+  "kinds": [
+    "bar-widget"
+  ],
+  "entryPoints": {
+    "barWidget": "Panel.qml"
+  },
+  "barWidget": {
+    "displayName": "Network + Hotspot",
+    "description": "Wi-Fi controls, connection state, and laptop hotspot",
+    "category": "Network",
+    "allowMultiple": false
+  },
+  "omarchy": {
+    "clonedFrom": "omarchy.network"
+  }
+}

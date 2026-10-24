@@ -1,2 +1,0 @@
-# Managed outside pacman/yay (mise runtimes are declared in dotfiles/mise).
-# No external installer is invoked automatically by setup.

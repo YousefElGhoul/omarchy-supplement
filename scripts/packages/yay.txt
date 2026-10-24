@@ -1,3 +1,2 @@
-# Selected foreign packages. JetBrains IDEs are installed and managed by Toolbox.
+# AUR packages unavailable in configured pacman repositories.
 jetbrains-toolbox
-zen-browser-bin

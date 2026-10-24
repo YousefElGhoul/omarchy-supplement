@@ -1,26 +1,11 @@
-# Personal portable applications and development tools; Omarchy/base/hardware
-# packages are deliberately omitted. Review before extending this list.
+# Apps not included in Omarchy's current package manifests.
 7zip
-bat
-btop
-chromium
-docker
-docker-buildx
-docker-compose
-eza
-fd
-fzf
-git
 keepassxc
-jq
-lazydocker
-lazygit
-mise-bin
-neovim
 prismlauncher
-ripgrep
-stow
-tmux
+tailscale
+thunderbird
 tmuxp
+virt-manager
+voxtype-bin
 yazi
-zoxide
+zen-browser-bin

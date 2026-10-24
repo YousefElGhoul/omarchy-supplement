@@ -1,0 +1,109 @@
+#!/usr/bin/env bash
+# Reports and toggles an OS-level lock for every USB V4L2 capture camera.
+# The toggle path runs through pkexec; status intentionally remains unprivileged.
+set -euo pipefail
+
+state_dir=/var/lib/omarchy-webcam-control
+state_file="$state_dir/blocked-devices"
+service_name=omarchy-webcam-block.service
+installed_script=/usr/local/libexec/omarchy-webcam-control
+devices=()
+for device in /dev/video*; do
+  [[ -e "$device" ]] || continue
+  if v4l2-ctl --device "$device" --all 2>/dev/null | grep -q "Video Capture"; then
+    devices+=("$device")
+  fi
+done
+
+usb_parent() {
+  local path
+  path=$(readlink -f "/sys/class/video4linux/$(basename "$1")/device")
+  while [[ "$path" != "/" ]]; do
+    if [[ -f "$path/idVendor" && -f "$path/authorized" ]]; then
+      printf '%s\n' "$path"
+      return 0
+    fi
+    path=$(dirname "$path")
+  done
+  return 1
+}
+
+can_block_current_devices() {
+  local device
+  ((${#devices[@]} > 0)) || return 1
+  for device in "${devices[@]}"; do
+    usb_parent "$device" >/dev/null || return 1
+  done
+}
+
+is_blocked() {
+  local path
+  [[ -r "$state_file" ]] || return 1
+  while IFS= read -r path; do
+    [[ -r "$path/authorized" && $(<"$path/authorized") == "0" ]] || return 1
+  done < "$state_file"
+}
+
+install_enforcer() {
+  install -D -m 755 "$0" "$installed_script"
+  install -D -m 644 "$(dirname "$0")/webcam-block.service" "/etc/systemd/system/$service_name"
+  systemctl daemon-reload
+  systemctl enable "$service_name" >/dev/null
+}
+
+enforce() {
+  local path
+  while [[ -r "$state_file" ]]; do
+    while IFS= read -r path; do
+      [[ -w "$path/authorized" ]] && printf '0' > "$path/authorized" || true
+    done < "$state_file"
+    sleep 0.2
+  done
+}
+
+status() {
+  local blocked=0 active=0 can_block=0 path
+
+  if [[ -r "$state_file" ]]; then
+    is_blocked && blocked=1
+    can_block=1
+  elif can_block_current_devices; then
+    can_block=1
+  fi
+  if ((${#devices[@]} > 0)) && fuser -s "${devices[@]}" 2>/dev/null; then
+    active=1
+  fi
+
+  printf 'devices=%s\ncanBlock=%s\nblocked=%s\nactive=%s\n' \
+    "${#devices[@]}" "$can_block" "$blocked" "$active"
+}
+
+toggle() {
+  local device path
+  [[ $(id -u) -eq 0 ]] || exit 77
+  if is_blocked; then
+    systemctl stop "$service_name" 2>/dev/null || true
+    while IFS= read -r path; do printf '1' > "$path/authorized"; done < "$state_file"
+    rm -f "$state_file"
+    return
+  fi
+
+  can_block_current_devices || exit 3
+  mkdir -p "$state_dir"
+  : > "$state_file"
+  for device in "${devices[@]}"; do
+    path=$(usb_parent "$device")
+    printf '%s\n' "$path" >> "$state_file"
+  done
+  chmod 644 "$state_file"
+  while IFS= read -r path; do printf '0' > "$path/authorized"; done < "$state_file"
+  install_enforcer
+  systemctl start "$service_name"
+}
+
+case "${1:-status}" in
+  status) status ;;
+  toggle) toggle ;;
+  enforce) enforce ;;
+  *) exit 64 ;;
+esac
