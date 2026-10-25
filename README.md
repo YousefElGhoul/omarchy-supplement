@@ -1,12 +1,10 @@
 # Supplement
 
-Personal Omarchy setup:
-
 ```bash
-./scripts/setup.sh --dry-run
-./scripts/setup.sh
+./scripts/setup.sh [--dry-run] [--no-pkg]
 ```
 
-Omarchy apps install first. After selected packages verify as installed, setup
-offers to remove packages listed in `scripts/packages/unwanted.txt`. Back up
-Stow conflicts before retrying; setup never adopts them.
+Full setup updates the system, installs selected apps, deploys configs, then
+removes unwanted packages. `--no-pkg` skips package and plugin operations. Four
+known config conflicts are backed up as `.bak`; other Stow conflicts stop
+deployment. Backups are never overwritten.
