@@ -2,7 +2,6 @@
 7zip
 keepassxc
 prismlauncher
-tailscale
 thunderbird
 tmuxp
 yazi
@@ -10,6 +9,5 @@ element-desktop
 obsidian
 obs-studio
 sqlitebrowser
-stow
 telegram-desktop
 wayvnc
