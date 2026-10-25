@@ -5,7 +5,11 @@ prismlauncher
 tailscale
 thunderbird
 tmuxp
-virt-manager
-voxtype-bin
 yazi
-zen-browser-bin
+element-desktop
+obsidian
+obs-studio
+sqlitebrowser
+stow
+telegram-desktop
+wayvnc

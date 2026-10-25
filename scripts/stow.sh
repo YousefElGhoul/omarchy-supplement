@@ -3,8 +3,12 @@ set -euo pipefail
 
 repo_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd -P)
 dry_run=false
-[[ ${1:-} == --dry-run ]] && dry_run=true
-[[ $# -le 1 ]] || { echo "Usage: $0 [--dry-run]" >&2; exit 2; }
+if [[ ${1:-} == --dry-run && $# -eq 1 ]]; then
+  dry_run=true
+elif [[ $# -gt 0 ]]; then
+  echo "Usage: $0 [--dry-run]" >&2
+  exit 2
+fi
 
 packages=()
 for path in "$repo_dir"/dotfiles/*; do

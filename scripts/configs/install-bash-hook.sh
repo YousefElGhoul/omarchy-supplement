@@ -8,6 +8,7 @@ if [[ -L $file ]]; then
   echo "$file is a symlink; migrate it manually before installing the Bash hook." >&2
   exit 1
 fi
+[[ -f $file ]] || { echo "Missing $file; refusing to create it." >&2; exit 1; }
 
 if grep -Fq "$hook" "$file"; then
   echo "Bash supplement hook already installed."

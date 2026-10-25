@@ -4,6 +4,8 @@ set -e
 file=$HOME/.config/hypr/hyprland.lua
 import='require("hyprland_overrides")'
 
+[[ -f $file ]] || { echo "Missing $file; refusing to create it." >&2; exit 1; }
+
 if grep -Fq "$import" "$file"; then
   echo "Hyprland supplement loader already installed."
   exit 0

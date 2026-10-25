@@ -4,7 +4,7 @@ set -euo pipefail
 repo_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd -P)
 dry_run=false
 
-if [[ ${1:-} == --dry-run ]]; then
+if [[ ${1:-} == --dry-run && $# -eq 1 ]]; then
   dry_run=true
 elif [[ $# -gt 0 ]]; then
   echo "Usage: $0 [--dry-run]" >&2
@@ -24,6 +24,12 @@ run() {
 [[ -r /etc/arch-release ]] || { echo "This setup targets Arch Linux." >&2; exit 1; }
 command -v pacman >/dev/null || { echo "pacman is required." >&2; exit 1; }
 
+omarchy=false
+if [[ -d /usr/share/omarchy ]]; then
+  omarchy=true
+  run bash "$repo_dir/scripts/packages/omarchy.sh"
+fi
+
 if ! command -v stow >/dev/null; then
   run sudo pacman -S --needed stow
 fi
@@ -39,6 +45,34 @@ if ((${#yay_packages[@]})); then
   run yay -S --needed "${yay_packages[@]}"
 fi
 
+if $omarchy; then
+  if ((${#pacman_packages[@]} + ${#yay_packages[@]})); then
+    if $dry_run; then
+      run omarchy pkg present "${pacman_packages[@]}" "${yay_packages[@]}"
+    else
+      omarchy pkg present "${pacman_packages[@]}" "${yay_packages[@]}" || {
+        echo "Package verification failed; leaving unwanted packages installed." >&2
+        exit 1
+      }
+    fi
+  fi
+
+  mapfile -t unwanted_packages < <(grep -Ev '^[[:space:]]*(#|$)' "$repo_dir/scripts/packages/unwanted.txt")
+  installed_unwanted=()
+  if $dry_run; then
+    installed_unwanted=("${unwanted_packages[@]}")
+  else
+    for package in "${unwanted_packages[@]}"; do
+      if pacman -Qq "$package" >/dev/null 2>&1; then
+        installed_unwanted+=("$package")
+      fi
+    done
+  fi
+  if ((${#installed_unwanted[@]})); then
+    run sudo pacman -R "${installed_unwanted[@]}"
+  fi
+fi
+
 if $dry_run; then
   "$repo_dir/scripts/stow.sh" --dry-run
   run "$repo_dir/scripts/configs/install-bash-hook.sh"
@@ -47,13 +81,13 @@ else
   "$repo_dir/scripts/configs/install-bash-hook.sh"
 fi
 
-if [[ -d /usr/share/omarchy ]]; then
+if $omarchy; then
   if $dry_run; then
-    echo '[dry-run] sudo ./overrides/omarchy/patch-nightlight.sh'
     run "$repo_dir/scripts/configs/install-hyprland-hook.sh"
+    echo '[dry-run] sudo ./overrides/omarchy/patch-nightlight.sh'
   else
-    sudo "$repo_dir/overrides/omarchy/patch-nightlight.sh"
     "$repo_dir/scripts/configs/install-hyprland-hook.sh"
+    sudo "$repo_dir/overrides/omarchy/patch-nightlight.sh"
   fi
 
   display_plugin="$HOME/.config/omarchy/plugins/monitor-layout"
@@ -62,4 +96,8 @@ if [[ -d /usr/share/omarchy ]]; then
   fi
 fi
 
-echo 'Setup complete. Check the README for manual desktop and hardware steps.'
+if $dry_run; then
+  echo 'Dry run complete.'
+else
+  echo 'Setup complete.'
+fi

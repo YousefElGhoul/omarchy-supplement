@@ -1,2 +1,10 @@
 # AUR packages unavailable in configured pacman repositories.
+climat
+freedownloadmanager-bin
+google-cloud-cli
 jetbrains-toolbox
+opencode-desktop-bin
+postman-bin
+slipmat
+solomd-bin
+xclicker
