@@ -7,9 +7,12 @@ no_pkg=false
 
 while (($#)); do
   case "$1" in
-    --dry-run) dry_run=true ;;
-    --no-pkg) no_pkg=true ;;
-    *) echo "Usage: $0 [--dry-run] [--no-pkg]" >&2; exit 2 ;;
+  --dry-run) dry_run=true ;;
+  --no-pkg) no_pkg=true ;;
+  *)
+    echo "Usage: $0 [--dry-run] [--no-pkg]" >&2
+    exit 2
+    ;;
   esac
   shift
 done
@@ -24,8 +27,14 @@ run() {
   fi
 }
 
-[[ -r /etc/arch-release ]] || { echo "This setup targets Arch Linux." >&2; exit 1; }
-command -v pacman >/dev/null || { echo "pacman is required." >&2; exit 1; }
+[[ -r /etc/arch-release ]] || {
+  echo "This setup targets Arch Linux." >&2
+  exit 1
+}
+command -v pacman >/dev/null || {
+  echo "pacman is required." >&2
+  exit 1
+}
 
 omarchy=false
 [[ -d /usr/share/omarchy ]] && omarchy=true
@@ -57,7 +66,7 @@ elif $dry_run && { ! $no_pkg || $omarchy; }; then
 fi
 
 if ! $no_pkg; then
-  run sudo pacman -Syu --noconfirm
+  run sudo pacman -Sy --noconfirm
 
   if $omarchy; then
     if $dry_run; then
