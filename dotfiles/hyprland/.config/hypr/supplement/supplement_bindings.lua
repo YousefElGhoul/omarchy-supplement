@@ -35,8 +35,8 @@ hl.unbind("SUPER + SHIFT + C")
 hl.unbind("SUPER + CTRL + ALT + D")
 o.bind("SUPER + SHIFT + C", "Calendar", "omarchy-shell shell toggle omarchy.clock")
 
--- Notion
-o.bind("SUPER + SHIFT + ALT + N", "Notion", { launch = "notion-app" })
+-- Hermes Desktop
+o.bind("SUPER + H", "Hermes Desktop", { launch = "hermes-desktop" })
 
 -- Switch behavior of Super + Space and Super + Alt + Space
 hl.unbind("SUPER + SPACE")
