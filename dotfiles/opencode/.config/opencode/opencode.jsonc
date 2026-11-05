@@ -96,13 +96,13 @@
       "model": "openai/gpt-6-luna"
     },
     "explore": {
-      "model": "nvidia/deepseek-ai/deepseek-v4.1-flash"
+      "model": "openai/gpt-6-luna"
     },
     "general": {
-      "model": "nvidia/deepseek-ai/deepseek-v4.1-flash"
+      "model": "openai/gpt-6-luna"
     },
     "title": {
-      "model": "nvidia/deepseek-ai/deepseek-v4.1-flash"
+      "model": "openai/gpt-6-luna"
     },
     "summary": {
       "model": "openai/gpt-6-luna"
