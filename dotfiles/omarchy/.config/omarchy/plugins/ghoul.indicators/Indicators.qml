@@ -15,7 +15,7 @@ BarWidget {
   property bool indicatorAreaHovered: false
   property bool indicatorItemHovered: false
   readonly property bool alwaysShowIndicators: setting("alwaysShow", false) === true
-  readonly property bool revealInactiveIndicators: alwaysShowIndicators || indicatorAreaHovered || indicatorItemHovered || (bar && bar.centerSectionRevealHeld === true && bar.centerHoverRevealSuppressed !== true)
+  readonly property bool revealInactiveIndicators: alwaysShowIndicators || indicatorAreaHovered || indicatorItemHovered
 
   signal refreshRequested()
 
@@ -205,7 +205,9 @@ BarWidget {
     Item {
       id: inactiveHorizontalArea
 
-      implicitWidth: root.revealInactiveIndicators ? inactiveHorizontalBlock.implicitWidth : 0
+      // Keep a hover target only when no active indicator can reveal this block.
+      implicitWidth: root.revealInactiveIndicators ? inactiveHorizontalBlock.implicitWidth
+        : (activeHorizontalBlock.implicitWidth > 0 ? 0 : Math.min(root.barSize, inactiveHorizontalBlock.implicitWidth))
       implicitHeight: Math.max(inactiveHorizontalBlock.implicitHeight, root.barSize)
       width: implicitWidth
       height: implicitHeight
@@ -241,7 +243,8 @@ BarWidget {
       id: inactiveVerticalArea
 
       implicitWidth: Math.max(inactiveVerticalBlock.implicitWidth, root.barSize)
-      implicitHeight: root.revealInactiveIndicators ? inactiveVerticalBlock.implicitHeight : 0
+      implicitHeight: root.revealInactiveIndicators ? inactiveVerticalBlock.implicitHeight
+        : (activeVerticalBlock.implicitHeight > 0 ? 0 : Math.min(root.barSize, inactiveVerticalBlock.implicitHeight))
       width: implicitWidth
       height: implicitHeight
       clip: true
